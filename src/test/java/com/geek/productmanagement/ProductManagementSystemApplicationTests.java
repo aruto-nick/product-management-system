@@ -1,4 +1,4 @@
-package com.example.productmanagement;
+package com.geek.productmanagement;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
