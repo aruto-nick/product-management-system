@@ -6,14 +6,14 @@
   </head>
   <body>
 	  <h1>管理者登録</h1>
-	  <form action="admin" method="post">
+	  <form th:action="@{/admin-register}" method="post">
 		<select name="storeId" required>
 			<option value="">下記から選択</option>
-			<!-- Controllerから渡されたstoresデータを1件ずつ取り出し、その1件をstoreと名付ける-->
+			<!-- each:Controllerから渡されたstoresデータを1件ずつ取り出し、その1件をstoreと名付ける-->
+			<!-- value:取り出した1件のidデータを「登録ボタンクリック時に」サーバに送信する-->
+			<!-- text:取り出した1件のnameを画面に出力する-->
 			<option th:each="store :${stores}"
-					<!-- 取り出した1件のidデータを「登録ボタンクリック時に」サーバに送信する -->
 					th:value="${store.id}"
-					<!-- 取り出した1件のnameを画面に出力する-->
 					th:text="${store.storeName}">
 			</option>
 		</select><br>
