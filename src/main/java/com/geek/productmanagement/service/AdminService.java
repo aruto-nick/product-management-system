@@ -14,7 +14,13 @@ public class AdminService {
 		this.adminMapper = adminMapper;
 	}
 	
+	
 	public Admin findByEmail(String email) {
 		return adminMapper.findByEmail(email);
+	}
+	
+	//管理者登録画面で入力した値をMapperに渡してDBに登録する
+	public int insert(Admin admin) {
+		return adminMapper.insert(admin);
 	}
 }
