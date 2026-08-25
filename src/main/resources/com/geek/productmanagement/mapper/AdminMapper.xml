@@ -13,5 +13,13 @@
         WHERE email = #{email}
 
     </select>
+    
+    <insert id="insert">
+    	INSERT INTO admins 
+    	(store_id, position_id, authority_id, last_name, first_name, email, phone_number, password) 
+    	VALUES (#{storeId},#{positionId},#{authorityId},#{lastName},#{firstName},#{email},#{phoneNumber},#{password})
+    	
+    	
+    </insert>
 
 </mapper>

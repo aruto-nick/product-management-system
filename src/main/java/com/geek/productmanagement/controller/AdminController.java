@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.geek.productmanagement.entity.Admin;
 import com.geek.productmanagement.service.AdminAuthorityService;
 import com.geek.productmanagement.service.AdminPositionService;
-import com.geek.productmanagement.service.StoreService;
 import com.geek.productmanagement.service.AdminService;
+import com.geek.productmanagement.service.StoreService;
 
 @Controller
 public class AdminController {
@@ -50,9 +51,24 @@ public class AdminController {
 								@RequestParam String phoneNumber,
 								@RequestParam String password) {
 		
+		//Adminオブジェクトを作成
+		Admin admin = new Admin();
+		
+		//setterで８項目をadminに格納
+		admin.setStoreId(storeId);
+		admin.setPositionId(positionId);
+		admin.setAuthorityId(authorityId);
+		admin.setLastName(lastName);
+		admin.setFirstName(firstName);
+		admin.setEmail(email);
+		admin.setPhoneNumber(phoneNumber);
+		admin.setPassword(password);
+		
+		//管理者登録を実行して、登録「件数」をresultに入れる
+		int result = adminService.insert(admin);
 		
 		//登録成功時、TOP画面に遷移
-		if() {
+		if(result == 1) {
 			return "redirect:/top";		
 		}else
 		//登録失敗時、管理者登録画面のまま遷移しない
