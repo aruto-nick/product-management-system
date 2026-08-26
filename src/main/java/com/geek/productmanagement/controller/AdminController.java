@@ -80,7 +80,9 @@ public class AdminController {
 
 	//管理者一覧画面に遷移
 	@GetMapping("/admin-list")
-	String showAdminList() {
+	String showAdminList(Model model) {
+		//Serviceから取得したデータをModelに格納。"admins"と名付け
+		model.addAttribute("admins", adminService.findAll());
 		return "admin-list";
 	}
 	

@@ -18,8 +18,22 @@
     	INSERT INTO admins 
     	(store_id, position_id, authority_id, last_name, first_name, email, phone_number, password) 
     	VALUES (#{storeId},#{positionId},#{authorityId},#{lastName},#{firstName},#{email},#{phoneNumber},#{password})
-    	
-    	
     </insert>
+    
+    <select id="findAll" resultType="com.geek.productmanagement.dto.AdminListDto">
+    	SELECT admins.id, admins.last_name, admins.first_name, 
+    		   stores.store_name, admin_positions.position_name, 
+    		   admin_authorities.authority_name
+    	FROM admins 
+    	
+    	INNER JOIN stores 
+    	ON admins.store_id = stores.id 
+    	
+    	INNER JOIN admin_positions
+    	ON admins.position_id = admin_positions.id 
+    	
+    	INNER JOIN admin_authorities
+    	ON admins.authority_id = admin_authorities.id
+    </select>
 
 </mapper>
