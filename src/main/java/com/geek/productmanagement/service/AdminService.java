@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.dto.AdminListDto;
 import com.geek.productmanagement.entity.Admin;
 import com.geek.productmanagement.mapper.AdminMapper;
@@ -30,5 +31,10 @@ public class AdminService {
 	//管理者一覧画面に必要なデータをMapperから取得する
 	public List<AdminListDto> findAll(){
 		return adminMapper.findAll();
+	}
+	
+	//管理者詳細画面に必要なデータをMapperから取得する
+	public AdminDetailDto findDetailById(Integer id) {
+		return adminMapper.findDetailById(id);
 	}
 }

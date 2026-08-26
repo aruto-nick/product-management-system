@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<h1>管理者詳細</h1>
-		<table>
+		<table border="1">
 			<tr>
 				<th>店舗名</th>
 				<th>姓</th>
@@ -19,10 +19,20 @@
 				<th>更新日時</th>
 			</tr>
 			<tr>
-				<td></td>
+				<td th:text="${admin.storeName}"></td>
+				<td th:text="${admin.lastName}"></td>
+				<td th:text="${admin.firstName}"></td>
+				<td th:text="${admin.email}"></td>
+				<td th:text="${admin.positionName}"></td>
+				<td th:text="${admin.authorityName}"></td>
+				<td th:text="${admin.phoneNumber}"></td>
+				<td th:text="${admin.createdAt}"></td>
+				<td th:text="${admin.updatedAt}"></td>
 			</tr>
 		</table>
 		<button>削除</button>
-		<button>編集</button>
+		<button>
+			<a>編集</a>
+		</button>
 	</body>
 </html>

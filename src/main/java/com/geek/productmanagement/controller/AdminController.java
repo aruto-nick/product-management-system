@@ -86,6 +86,12 @@ public class AdminController {
 		return "admin-list";
 	}
 	
+	//管理者詳細画面に遷移
+	@GetMapping("/admin-detail")
+	String showAdminDetail(@RequestParam("id") Integer id,Model model) {
+		model.addAttribute("admin", adminService.findDetailById(id));
+		return "admin-detail";
+	}
 
 	
 }
