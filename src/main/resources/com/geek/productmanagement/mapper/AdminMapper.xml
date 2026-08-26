@@ -6,6 +6,7 @@
 
 <mapper namespace = 'com.geek.productmanagement.mapper.AdminMapper'>
 
+	
     <select id = 'findByEmail' resultType = 'com.geek.productmanagement.entity.Admin'>
 
         SELECT *
@@ -14,12 +15,14 @@
 
     </select>
     
+    <!-- 管理者登録画面のデータ登録SQL -->
     <insert id="insert">
     	INSERT INTO admins 
     	(store_id, position_id, authority_id, last_name, first_name, email, phone_number, password) 
     	VALUES (#{storeId},#{positionId},#{authorityId},#{lastName},#{firstName},#{email},#{phoneNumber},#{password})
     </insert>
     
+    <!-- 管理者一覧画面のデータ取得SQL -->
     <select id="findAll" resultType="com.geek.productmanagement.dto.AdminListDto">
     	SELECT admins.id, admins.last_name, admins.first_name, 
     		   stores.store_name, admin_positions.position_name, 
@@ -34,6 +37,28 @@
     	
     	INNER JOIN admin_authorities
     	ON admins.authority_id = admin_authorities.id
+    </select>
+    
+    
+    <!-- 管理者詳細画面のデータ取得SQL -->
+    <select id="findDetailById" resultType="com.geek.productmanagement.dto.AdminDetailDto">
+    	SELECT admins.id, admins.last_name, admins.first_name, 
+    			admins.email, admins.phone_number, stores.store_name, 
+    			admin_positions.position_name, admin_authorities.authority_name, 
+    			admins.created_at, admins.updated_at 
+    			
+    	FROM admins 
+    	
+    	INNER JOIN stores 
+    	ON admins.store_id = stores.id 
+    	
+    	INNER JOIN admin_positions
+    	ON admins.position_id = admin_positions.id 
+    	
+    	INNER JOIN admin_authorities
+    	ON admins.authority_id = admin_authorities.id
+    	
+    	WHERE admins.id = #{id}
     </select>
 
 </mapper>
