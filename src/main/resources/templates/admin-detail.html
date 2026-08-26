@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<title>管理者詳細</title>
 		<meta charset="UTF-8" />
@@ -26,8 +26,10 @@
 				<td th:text="${admin.positionName}"></td>
 				<td th:text="${admin.authorityName}"></td>
 				<td th:text="${admin.phoneNumber}"></td>
-				<td th:text="${admin.createdAt}"></td>
-				<td th:text="${admin.updatedAt}"></td>
+				<td th:text="${#temporals.format(
+							admin.createdAt, 'yyyy年MM月dd日 HH:mm:ss')}"></td>
+				<td th:text="${#temporals.format(
+							admin.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
 			</tr>
 		</table>
 		<button>削除</button>
