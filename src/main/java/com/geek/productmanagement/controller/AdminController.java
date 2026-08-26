@@ -92,6 +92,12 @@ public class AdminController {
 		model.addAttribute("admin", adminService.findDetailById(id));
 		return "admin-detail";
 	}
+	
+	//管理者編集画面に遷移
+	@GetMapping("/admin-edit")
+	String showAdminEdit(@RequestParam("id")Integer id) {
+		return "admin-edit";
+	}
 
 	
 }
