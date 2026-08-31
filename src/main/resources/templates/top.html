@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <title>TOP画面</title>
@@ -10,6 +10,9 @@
 	    <a href="/admin-list">管理者一覧</a><br>
 	    <a href="/product-list">商品一覧</a><br>
 	    <a href="/order-history">商品発注履歴</a><br>
+	    <form th:action="@{/logout}" method="post">
+			<button type="submit">ログアウト</button>
+		</form>
   </body>
 
 
