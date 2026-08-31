@@ -20,4 +20,8 @@ public interface AdminMapper {
 	
 	//管理者詳細画面のデータ１件取得して、返すメソッド
 	AdminDetailDto findDetailById(Integer id);
+	
+	//管理者詳細画面からデータを削除するメソッド
+	//削除の影響を受けた行数「1」をintで受け取る
+	int deleteById(Integer id); 
 }

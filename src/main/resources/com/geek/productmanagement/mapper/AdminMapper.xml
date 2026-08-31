@@ -60,5 +60,11 @@
     	
     	WHERE admins.id = #{id}
     </select>
+    
+    <!-- 管理者詳細画面の削除機能 -->
+    <delete id="deleteById">
+    	DELETE FROM admins 
+    	WHERE admins.id = #{id}
+    </delete>
 
 </mapper>

@@ -32,7 +32,14 @@
 							admin.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
 			</tr>
 		</table>
-		<button>削除</button>
+		<form th:action="@{/admin-delete}" method="post" 
+				onsubmit="return confirm('本当に管理者情報を削除しますか？')">
+			<input type="hidden" name="id" th:value="${admin.id}">
+				<button type="submit">
+					削除
+				</button>
+		</form>
+		
 		<a th:href="@{/admin-edit(id=${admin.id})}">
 			編集
 		</a>

@@ -98,6 +98,13 @@ public class AdminController {
 	String showAdminEdit(@RequestParam("id")Integer id) {
 		return "admin-edit";
 	}
+	
+	//管理者詳細画面の「削除機能」
+	@PostMapping("/admin-delete")
+	String deleteById(@RequestParam("id") Integer id) {
+		adminService.deleteById(id);
+		return "redirect:/admin-list";
+	}
 
 	
 }

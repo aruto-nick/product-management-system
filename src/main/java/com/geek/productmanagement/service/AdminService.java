@@ -47,4 +47,9 @@ public class AdminService {
 	public AdminDetailDto findDetailById(Integer id) {
 		return adminMapper.findDetailById(id);
 	}
+	
+	//管理者詳細画面にて管理者データを「削除」する機能
+	public int deleteById(Integer id) {
+		return adminMapper.deleteById(id);
+	}
 }
