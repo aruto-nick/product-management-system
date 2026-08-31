@@ -2,6 +2,7 @@ package com.geek.productmanagement.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,15 +12,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 	
-	// BCrypt方式でパスワードをハッシュ化・照合するオブジェクトをBean登録する
+	// ログイン・ログアウト・URLごとのアクセス制限を設定する
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http)
 			throws Exception{
 		
-		//// /loginはログイン前でもアクセス可能、それ以外はログイン済みの利用者のみアクセス可能
+		//ログイン前でもアクセス可能：ログイン画面・アクセス不可画面
+		//管理者のみ権限：管理者登録・編集・「削除機能」
 		http.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/login").permitAll()
+				.requestMatchers("/login","/access-denied").permitAll()
+				.requestMatchers("/admin-register","/admin-edit")
+				.hasRole("ADMIN")
+				.requestMatchers(HttpMethod.POST,"/admin-delete")
+				.hasRole("ADMIN")
 				.anyRequest().authenticated()
+		);
+		
+		//アクセス不可画面
+		http.exceptionHandling(exception -> exception
+				.accessDeniedPage("/access-denied")
 		);
 		
 		//ログイン方法：
