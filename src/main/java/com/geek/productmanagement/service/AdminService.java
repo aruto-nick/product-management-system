@@ -2,6 +2,7 @@ package com.geek.productmanagement.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
@@ -13,9 +14,13 @@ import com.geek.productmanagement.mapper.AdminMapper;
 public class AdminService {
 	
 	private final AdminMapper adminMapper;
+	//登録パスワードをハッシュ化するため、passwordEncoderを使用可能にする
+	private final PasswordEncoder passwordEncoder;
 
-	public AdminService(AdminMapper adminMapper) {
+	public AdminService(AdminMapper adminMapper,
+			 			PasswordEncoder passwordEncoder) {
 		this.adminMapper = adminMapper;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
 	
@@ -23,8 +28,13 @@ public class AdminService {
 		return adminMapper.findByEmail(email);
 	}
 	
-	//管理者登録画面で入力した値をMapperに渡してDBに登録する
+	//管理者登録画面で入力したパスワードをハッシュ化した後に、Mapperに渡す
 	public int insert(Admin admin) {
+		//取得したパスワードをハッシュ化
+		String encodedPasseword = passwordEncoder.encode(admin.getPassword());
+		//Adminのパスワードをハッシュ化後の値に設定
+		admin.setPassword(encodedPasseword);
+		//ハッシュ化パスワードを含むAdminをMapperに渡す
 		return adminMapper.insert(admin);
 	}
 	
