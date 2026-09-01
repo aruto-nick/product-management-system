@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ログイン画面</title>
+  </head>
+  <body>
+	  <h1>ログイン画面</h1>
+	  <!-- ログアウト時のメッセージ:
+	  	URLにlogoutというリクエストパラメータある時 -->
+	  <div th:if="${param.logout}">
+		  <p>ログアウトしました</p>
+	  </div>
+	  <!-- メルアドorパスワード誤り時のメッセージ -->
+	  <div th:if="${param.error}">
+		  <p>メールアドレスまたはパスワードが正しくありません</p>
+	  </div>
+	    <form th:action="@{/login}" method="post">
+			  <input type="email" name="email" placeholder="メールアドレス" required><br>
+			  <input type="password" name="password" placeholder="パスワード" required>
+			  <button type="submit">ログイン</button>
+		 </form>
+  </body>
+
+
+</html>

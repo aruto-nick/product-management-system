@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TOP画面</title>
+  </head>
+  <body>
+	  <h1>TOP画面</h1>
+	    <a href="/admin-register">管理者登録</a><br>
+	    <a href="/admin-list">管理者一覧</a><br>
+	    <a href="/product-list">商品一覧</a><br>
+	    <a href="/order-history">商品発注履歴</a><br>
+	    <form th:action="@{/logout}" method="post">
+			<button type="submit">ログアウト</button>
+		</form>
+  </body>
+
+
+</html>
