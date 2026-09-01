@@ -1,16 +1,22 @@
 package com.geek.productmanagement.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.entity.Admin;
 import com.geek.productmanagement.service.AdminAuthorityService;
 import com.geek.productmanagement.service.AdminPositionService;
 import com.geek.productmanagement.service.AdminService;
 import com.geek.productmanagement.service.StoreService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AdminController {
@@ -99,10 +105,30 @@ public class AdminController {
 		return "admin-edit";
 	}
 	
-	//管理者詳細画面の「削除機能」
+	//管理者詳細画面の「削除機能」：削除＆ログアウト
 	@PostMapping("/admin-delete")
-	String deleteById(@RequestParam("id") Integer id) {
+	String deleteById(@RequestParam("id") Integer id,Authentication authentication,
+						HttpServletRequest request, HttpServletResponse response) {
+		//ログイン中管理者のメールアドレス取得&格納   by  CustomUserDetailsServiceにてメルアドをusernameとして設定してるため可能
+		String loginEmail = authentication.getName();
+		//管理者情報を取得して格納
+		AdminDetailDto deleteTarget = adminService.findDetailById(id);
+		//削除対象がログイン中の本人か確認:管理者情報あり＆ログインメルアドとメルアド一致
+		boolean deletingSelf = 
+				deleteTarget != null 
+				&& loginEmail.equals(deleteTarget.getEmail());
+		//管理者情報を削除
 		adminService.deleteById(id);
+		//自分自身を削除した場合
+		if(deletingSelf) {
+			
+			SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+			
+			logoutHandler.logout(request, response, authentication);
+			//ログイン画面に移動
+			return "redirect:/login";
+		}
+		//別の管理者削除の場合
 		return "redirect:/admin-list";
 	}
 

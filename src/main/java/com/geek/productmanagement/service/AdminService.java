@@ -50,6 +50,7 @@ public class AdminService {
 	
 	//管理者詳細画面にて管理者データを「削除」する機能
 	public int deleteById(Integer id) {
+		
 		return adminMapper.deleteById(id);
 	}
 }
