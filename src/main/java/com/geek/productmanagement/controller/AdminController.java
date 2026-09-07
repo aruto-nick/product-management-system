@@ -5,6 +5,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -99,12 +100,6 @@ public class AdminController {
 		return "admin-detail";
 	}
 	
-	//管理者編集画面に遷移
-	@GetMapping("/admin-edit")
-	String showAdminEdit(@RequestParam("id")Integer id) {
-		return "admin-edit";
-	}
-	
 	//管理者詳細画面の「削除機能」：削除＆ログアウト
 	@PostMapping("/admin-delete")
 	String deleteById(@RequestParam("id") Integer id,Authentication authentication,
@@ -132,5 +127,29 @@ public class AdminController {
 		return "redirect:/admin-list";
 	}
 
+	//管理者編集画面の「初期画面」表示
+	@GetMapping("/admin-edit")
+	String showAdminEdit(@RequestParam("id") Integer id, Model model) {
+		//編集画面に表示する現在のデータ
+		model.addAttribute("admin", adminService.findById(id));
+		//ドロップダウンに表示するデータ
+		model.addAttribute("stores", storeService.findAll());
+		model.addAttribute("positions", adminPositionService.findAll());
+		model.addAttribute("authorities", adminAuthorityService.findAll());
+		return "admin-edit";
+	}
+	
+	// 管理者情報を更新
+	@PostMapping("/admin-edit")
+	String updateAdmin(@ModelAttribute Admin admin) {
+
+	    int result = adminService.updateById(admin);
+
+	    if (result == 1) {
+	        return "redirect:/admin-detail?id=" + admin.getId();
+	    }
+
+	    return "redirect:/admin-edit?id=" + admin.getId();
+	}
 	
 }

@@ -1,10 +1,89 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-		<title>管理者編集</title>
-		<meta charset="UTF-8" />
-	</head>
-	<body>
-		<h1>管理者編集</h1>
-	</body>
+
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <meta charset="UTF-8" />
+    <title>管理者編集</title>
+  </head>
+
+  <body>
+
+    <h1>管理者編集</h1>
+
+    <form th:action="@{/admin-edit}"
+          th:object="${admin}"
+          method="post">
+
+      <!-- 更新対象の管理者ID -->
+      <input type="hidden" th:field="*{id}" />
+
+      <label for="storeId">店舗名</label>
+      <select th:field="*{storeId}" required>
+        <option value="">下記から選択</option>
+        <option th:each="store : ${stores}"
+                th:value="${store.id}"
+                th:text="${store.storeName}">
+        </option>
+      </select>
+      <br />
+
+      <label for="lastName">姓</label>
+      <input type="text"
+             th:field="*{lastName}"
+             placeholder="姓"
+             maxlength="10"
+             required />
+      <br />
+
+      <label for="firstName">名</label>
+      <input type="text"
+             th:field="*{firstName}"
+             placeholder="名"
+             maxlength="10"
+             required />
+      <br />
+
+      <label for="email">メールアドレス</label>
+      <input type="email"
+             th:field="*{email}"
+             placeholder="メールアドレス"
+             required />
+      <br />
+
+      <label for="positionId">役職</label>
+      <select th:field="*{positionId}" required>
+        <option value="">下記から選択</option>
+        <option th:each="position : ${positions}"
+                th:value="${position.id}"
+                th:text="${position.positionName}">
+        </option>
+      </select>
+      <br />
+
+      <label for="authorityId">権限</label>
+      <select th:field="*{authorityId}" required>
+        <option value="">下記から選択</option>
+        <option th:each="authority : ${authorities}"
+                th:value="${authority.id}"
+                th:text="${authority.authorityName}">
+        </option>
+      </select>
+      <br />
+
+      <label for="phoneNumber">電話番号</label>
+      <input type="tel"
+             th:field="*{phoneNumber}"
+             placeholder="電話番号 ハイフン不要"
+             maxlength="11"
+             pattern="[0-9]{10,11}"
+             required />
+      <br />
+
+      <button type="submit">更新</button>
+
+    </form>
+
+  </body>
+
 </html>
