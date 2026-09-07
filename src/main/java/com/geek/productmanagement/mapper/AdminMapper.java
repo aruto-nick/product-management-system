@@ -24,4 +24,10 @@ public interface AdminMapper {
 	//管理者詳細画面からデータを削除するメソッド
 	//削除の影響を受けた行数「1」をintで受け取る
 	int deleteById(Integer id); 
+	
+	//管理者編集画面にてデータ編集をするメソッド
+	int updateById(Admin Admin);
+	
+	//管理者編集画面に「初期値＝現在の管理者情報」を表示するメソッド
+	Admin findById(Integer id); 
 }

@@ -66,5 +66,25 @@
     	DELETE FROM admins 
     	WHERE admins.id = #{id}
     </delete>
+    
+    <!-- 管理者情報を編集する機能 -->
+    <update id="updateById">
+    	UPDATE admins 
+    	SET store_id = #{storeId}, 
+    	 last_name = #{lastName}, 
+    	 first_name = #{firstName}, 
+    	 email = #{email}, 
+    	 position_id = #{positionId}, 
+    	 authority_id = #{authorityId}, 
+    	 phone_number = #{phoneNumber} 
+    	WHERE id = #{id}
+    </update>
+    
+    <!-- 編集画面に初期値（現在の管理者情報）を取得 -->
+    <select id="findById" resultType="com.geek.productmanagement.entity.Admin">
+    	SELECT id, last_name, first_name, email, position_id, authority_id, phone_number 
+    	FROM admins
+    	WHERE id = #{id}
+    </select>
 
 </mapper>

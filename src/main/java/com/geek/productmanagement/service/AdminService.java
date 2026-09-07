@@ -53,4 +53,14 @@ public class AdminService {
 		
 		return adminMapper.deleteById(id);
 	}
+	
+	//管理者「編集」機能
+	public int updateById(Admin admin) {
+		return adminMapper.updateById(admin);
+	}
+	
+	//管理者編集画面に「初期値＝現在の管理者情報」を表示
+	public Admin findById(Integer id) {
+		return adminMapper.findById(id);
+	}
 }
