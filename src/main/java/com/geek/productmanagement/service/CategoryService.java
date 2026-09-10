@@ -15,8 +15,9 @@ public class CategoryService {
 		this.categoryMapper = categoryMapper;
 	}
 	
-	public List<MainCategory> findMainCategoriesByStoreId(Integer storeId){
-		return categoryMapper.findMainCategoriesByStoreId(storeId);
+	//大カテゴリ情報取得
+	public List<MainCategory> findAllMainCategories(){
+		return categoryMapper.findAllMainCategories();
 	}
 
 }

@@ -44,7 +44,7 @@ public class ProductController {
 		Integer storeId = loginAdmin.getStoreId();
 		
 		//大カテゴリ一覧を取得
-		List<MainCategory> mainCategoryList = categoryService.findMainCategoriesByStoreId(storeId);
+		List<MainCategory> mainCategoryList = categoryService.findAllMainCategories();
 		
 		//大カテゴリ一覧をmodelに格納
 		model.addAttribute("mainCategoryList", mainCategoryList);
