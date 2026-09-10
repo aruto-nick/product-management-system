@@ -20,8 +20,9 @@ public class ProductService {
 		return productMapper.findAllByStoreId(storeId);
 	}
 	
-	public List<ProductListDto> searchByStoreIdAndProductName(Integer storeId, String productName){
-		return productMapper.searchByStoreIdAndProductName(storeId, productName);
+	public List<ProductListDto> searchByStoreIdAndProductName(Integer storeId,
+										String productName,Integer mainCategoryId){
+		return productMapper.searchByStoreIdAndProductName(storeId, productName, mainCategoryId);
 	}
 
 }

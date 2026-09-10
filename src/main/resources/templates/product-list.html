@@ -16,7 +16,9 @@
 					<option value="">大カテゴリ一覧</option>
 					<option th:each="mainCategory:${mainCategoryList}"
 							th:value="${mainCategory.id}"
-							th:text="${mainCategory.mainCategoryName}">
+							th:text="${mainCategory.mainCategoryName}"
+							th:selected="${mainCategoryId != null
+									and mainCategory.id == mainCategoryId}">
 					</option>
 				</select>
 			<button type="submit">検索</button>

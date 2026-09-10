@@ -36,11 +36,21 @@
 		INNER JOIN child_categories cc 
 		ON cc.id = p.child_category_id
 		
+		INNER JOIN sub_categories sc
+	    ON cc.sub_category_id = sc.id
+	    
+		INNER JOIN main_categories mc
+	    ON sc.main_category_id = mc.id
+		
 		WHERE sp.store_id = #{storeId} 
 		
 		<if test="productName != null and productName != '' ">
 			AND p.product_name LIKE CONCAT('%', #{productName}, '%')
 		</if>  
+		
+		<if test="mainCategoryId != null">
+		    AND mc.id = #{mainCategoryId}
+		</if>
 		
 		ORDER BY p.id
 	</select>

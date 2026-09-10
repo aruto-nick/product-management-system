@@ -16,5 +16,6 @@ public interface ProductMapper {
 	//商品検索メソッド
 	List<ProductListDto> searchByStoreIdAndProductName(
 			@Param("storeId") Integer storeId,
-			@Param("productName") String productName);
+			@Param("productName") String productName,
+			@Param("mainCategoryId")Integer mainCategoryId);
 }
