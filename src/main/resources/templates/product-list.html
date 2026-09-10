@@ -1,10 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8" />
 		<title>商品一覧画面</title>
 	</head>
 	<body>
 		<h1>商品一覧</h1>
+		<table border="1">
+			
+			<thead>
+				<tr>
+					<th>商品画像</th>
+					<th>商品名</th>
+					<th>小カテゴリ</th>
+					<th>店舗価格</th>
+					<th>在庫数</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="product:${productList}">
+					<td>
+						<img th:if = "${not #strings.isEmpty(product.productImage)}"
+							th:src = "@{'/images/products/' + ${product.productImage} }"
+							alt = "商品画像"
+							width="100">
+							
+							<span th:unless="${not #strings.isEmpty(product.productImage)}">
+					</td>
+					<td th:text="${product.productName}"></td>
+					<td th:text="${product.childCategoryName}"></td>
+					<td th:text="${product.storePrice}"></td>
+					<td th:text="${product.storeStock}"></td>
+					<td class="">
+						<a>
+							詳細
+						</a>
+					</td>
+				</tr>
+				
+				<tr th:if="${#lists.isEmpty(productList)}">
+					<td colspan="6">商品がありませんでした</td>
+				</tr>
+				
+			</tbody>
+
+		</table>
 	</body>
 </html>

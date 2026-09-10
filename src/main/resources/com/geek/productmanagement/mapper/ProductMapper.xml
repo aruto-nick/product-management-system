@@ -6,18 +6,20 @@
   
 <mapper namespace = 'com.geek.productmanagement.mapper.ProductMapper'>
 	<select id = 'findAllByStoreId' resultType = 'com.geek.productmanagement.dto.ProductListDto'>
-		SELECT id, product_name, product_image ,
-		child_category_name, 
-		store_price, store_stock 
-		FROM products
+		SELECT p.id, p.product_name, p.product_image ,
+		cc.child_category_name, 
+		sp.store_price, sp.store_stock 
+		FROM store_products sp
 		
-		INNER JOIN child_categories 
-		ON products.child_category_id = child_categories.id
+		INNER JOIN products p
+		ON sp.product_id = p.id
 		
-		INNER JOIN store_products
-		ON storeproducts.store_id = store_products.id
+		INNER JOIN child_categories cc 
+		ON p.child_category_id = cc.id
 		
-		WHERE 
+		WHERE sp.store_id = #{storeId}
+		
+		ORDER BY p.id
 		
 	</select>
   
