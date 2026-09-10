@@ -6,6 +6,13 @@
 	</head>
 	<body>
 		<h1>商品一覧</h1>
+		<form th:action="@{/product-list}" method="get">
+			<label for="productName">商品名</label>
+			
+			<input type="text" id="productName" 
+				name="productName">
+			<button type="submit">検索</button>
+		</form>
 		<table border="1">
 			
 			<thead>
@@ -27,7 +34,7 @@
 							alt = "商品画像"
 							width="100">
 							
-							<span th:unless="${not #strings.isEmpty(product.productImage)}">
+						<span th:unless="${not #strings.isEmpty(product.productImage)}">
 					</td>
 					<td th:text="${product.productName}"></td>
 					<td th:text="${product.childCategoryName}"></td>
