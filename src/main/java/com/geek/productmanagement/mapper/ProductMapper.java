@@ -10,6 +10,11 @@ import com.geek.productmanagement.dto.ProductListDto;
 @Mapper
 public interface ProductMapper {
 	//商品一覧表示メソッド
-		List<ProductListDto>  findAllByStoreId(
-				@Param("storeId") Integer storeId);
+	List<ProductListDto>  findAllByStoreId(
+			@Param("storeId") Integer storeId);
+	
+	//商品検索メソッド
+	List<ProductListDto> searchByStoreIdAndProductName(
+			@Param("storeId") Integer storeId,
+			@Param("productName") String productName);
 }

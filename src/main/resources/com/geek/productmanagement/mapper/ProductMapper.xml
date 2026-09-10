@@ -22,5 +22,27 @@
 		ORDER BY p.id
 		
 	</select>
+	
+	<select id="searchByStoreIdAndProductName" resultType="com.geek.productmanagement.dto.ProductListDto">
+		SELECT p.id, p.product_name, p.product_image, 
+		cc.child_category_name, 
+		sp.store_price, sp.store_stock 
+		
+		FROM store_products sp
+		
+		INNER JOIN products p
+		ON sp.product_id = p.id 
+		
+		INNER JOIN child_categories cc 
+		ON cc.id = p.child_category_id
+		
+		WHERE sp.store_id = #{storeId} 
+		
+		<if test="productName != null and productName != '' ">
+			AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+		</if>  
+		
+		ORDER BY p.id
+	</select>
   
 </mapper>

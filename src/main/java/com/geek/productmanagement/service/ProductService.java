@@ -19,5 +19,9 @@ public class ProductService {
 	public List<ProductListDto> findAllByStoreId(Integer storeId){
 		return productMapper.findAllByStoreId(storeId);
 	}
+	
+	public List<ProductListDto> searchByStoreIdAndProductName(Integer storeId, String productName){
+		return productMapper.searchByStoreIdAndProductName(storeId, productName);
+	}
 
 }

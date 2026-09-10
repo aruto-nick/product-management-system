@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.ProductListDto;
 import com.geek.productmanagement.entity.Admin;
@@ -25,7 +26,8 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product-list")
-	String showProductList(Authentication authentication, Model model) {
+	String showProductList(@RequestParam(required = false) String productName, 
+						Authentication authentication, Model model) {
 		
 		//ログイン管理者のメルアド取得
 		String loginEmail = authentication.getName();
@@ -37,10 +39,13 @@ public class ProductController {
 		Integer storeId = loginAdmin.getStoreId();
 		
 		//所属店舗の商品一覧情報を取得
-		List<ProductListDto> productList = productService.findAllByStoreId(storeId);
+		List<ProductListDto> productList = productService.searchByStoreIdAndProductName(storeId,productName);
 		
 		//商品一覧をmodelに格納
 		model.addAttribute("productList", productList);
+		
+		//検索ボックスに入力された商品名をmodelに格納
+		model.addAttribute("productName", productName);
 		
 		return "product-list";
 	}
