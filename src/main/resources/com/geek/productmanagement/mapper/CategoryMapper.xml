@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace='com.geek.productmanagement.mapper.CategoryMapper'>
+  	<select id="findMainCategoriesByStoreId" resultType="com.geek.productmanagement.entity.MainCategory">
+  		SELECT DISTINCT mc.id, mc.main_category_name
+  		
+  		FROM main_categories mc
+  		
+  		INNER JOIN sub_categories sc 
+  		ON sc.main_category_id = mc.id
+  		
+  		INNER JOIN child_categories cc 
+  		ON cc.sub_category_id = sc.id
+  		
+  		INNER JOIN products p 
+  		ON p.child_category_id = cc.id
+  		
+  		INNER JOIN store_products sp
+  		ON sp.product_id = p.id
+  		
+  		WHERE sp.store_id = #{storeId}  	
+  		
+  		ORDER BY mc.id 
+  	</select>
+  </mapper>
