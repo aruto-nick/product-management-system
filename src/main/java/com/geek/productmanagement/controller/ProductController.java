@@ -37,6 +37,7 @@ public class ProductController {
 							@RequestParam(required = false) Integer mainCategoryId,
 							@RequestParam(required = false) Integer subCategoryId,
 							@RequestParam(required = false) Integer childCategoryId,
+							@RequestParam(name = "page", defaultValue = "1") Integer page,
 						Authentication authentication, Model model) {
 		
 		//ログイン管理者のメルアド取得
@@ -47,6 +48,27 @@ public class ProductController {
 		
 		//ログイン管理者情報から店舗ID取得
 		Integer storeId = loginAdmin.getStoreId();
+		
+		//1ページに表示する商品数
+		Integer limit = 4;
+		
+		//次ページ遷移時に飛ばす商品件数
+		Integer offset = (page -1)* limit;
+		
+		//検索結果に該当する商品件数
+		Integer totalProducts = productService.countProducts(storeId, productName, mainCategoryId, subCategoryId, childCategoryId);
+		
+		//検索条件に該当する総ページ数
+		Integer totalPages = (totalProducts + limit - 1 ) / limit;
+		
+		//検索条件に該当する総商品数をmodelに格納
+		model.addAttribute("totalProducts", totalProducts);
+		
+		//検索条件に該当する総ページ数をmodelに格納
+		model.addAttribute("totalPages", totalPages);
+		
+		//現在のページ数をmodelに格納
+		model.addAttribute("currentPage",page);
 		
 		//大カテゴリ一覧を取得
 		List<MainCategory> mainCategoryList = categoryService.findAllMainCategories();
@@ -66,8 +88,9 @@ public class ProductController {
 		//小カテゴリ一覧をmodelに格納
 		model.addAttribute("childCategoryList", childCategoryList);
 		
-		//所属店舗の商品一覧情報を取得
-		List<ProductListDto> productList = productService.searchByStoreIdAndProductName(storeId,productName,mainCategoryId,subCategoryId);
+		//現在ページに表示する商品一覧を取得
+		List<ProductListDto> productList = productService.searchByStoreIdAndProductName(
+				storeId,productName,mainCategoryId,subCategoryId,childCategoryId,limit,offset);
 		
 		//商品一覧をmodelに格納
 		model.addAttribute("productList", productList);
@@ -86,5 +109,7 @@ public class ProductController {
 		
 		return "product-list";
 	}
+	
+	
 
 }

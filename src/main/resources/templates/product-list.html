@@ -82,5 +82,36 @@
 			</tbody>
 
 		</table>
+		
+
+		
+		<!--ページネーション機能-->
+		<nav th:if="${totalPages > 0}"
+			style="display: flex;
+				justify-content: center;
+				gap: 24px;
+				font-size: 24px;">
+			
+			<span th:each="pageNumber:${#numbers.sequence(1,totalPages)}">
+			
+				<!--現在のページ番号-->
+				<span th:if="${pageNumber == currentPage}"
+					  th:text="${pageNumber}">
+				</span>
+					
+				
+					<a th:unless="${pageNumber == currentPage}"
+						th:href="@{/product-list(
+							page=${pageNumber},
+							productName=${productName},
+							mainCategoryId=${mainCategoryId},
+							subCategoryId=${subCategoryId},
+							childCategoryId=${childCategoryId}
+						)}"
+						th:text="${pageNumber}">
+					</a>
+			</span>
+			
+		</nav>
 	</body>
 </html>

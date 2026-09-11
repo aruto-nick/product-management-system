@@ -21,8 +21,19 @@ public class ProductService {
 	}
 	
 	public List<ProductListDto> searchByStoreIdAndProductName(Integer storeId,
-										String productName,Integer mainCategoryId, Integer subCategoryId){
-		return productMapper.searchByStoreIdAndProductName(storeId, productName, mainCategoryId, subCategoryId);
+										String productName,Integer mainCategoryId,
+										Integer subCategoryId, Integer childCategoryId,
+										Integer limit, Integer offset){
+		return productMapper.searchByStoreIdAndProductName(storeId, productName, mainCategoryId, 
+						subCategoryId,childCategoryId, limit, offset);
+	}
+	
+	//商品一覧画面の商品数をカウント
+	public Integer countProducts(Integer storeId,
+				String productName,Integer mainCategoryId,
+				Integer subCategoryId, Integer childCategoryId) {
+		
+		return productMapper.countProducts(storeId, productName, mainCategoryId, subCategoryId, childCategoryId);
 	}
 
 }

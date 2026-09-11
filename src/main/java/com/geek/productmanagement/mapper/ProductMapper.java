@@ -18,5 +18,16 @@ public interface ProductMapper {
 			@Param("storeId") Integer storeId,
 			@Param("productName") String productName,
 			@Param("mainCategoryId")Integer mainCategoryId,
-			@Param("subCategoryId")Integer subCategoryId);
+			@Param("subCategoryId")Integer subCategoryId,
+			@Param("childCategoryId") Integer childCategoryId,
+			@Param("limit") Integer limit, 
+			@Param("offset") Integer offset);
+	
+	//商品一覧画面の総商品数をカウント
+	public Integer countProducts(
+			@Param("storeId")Integer storeId,
+			@Param("productName") String productName,
+			@Param("mainCategoryId")Integer mainCategoryId,
+			@Param("subCategoryId")Integer subCategoryId,
+			@Param("childCategoryId") Integer childCategoryId);
 }
