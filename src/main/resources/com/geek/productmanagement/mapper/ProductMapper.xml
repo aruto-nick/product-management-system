@@ -52,6 +52,10 @@
 		    AND mc.id = #{mainCategoryId}
 		</if>
 		
+		<if test="subCategoryId != null">
+			AND sc.id = #{subCategoryId}
+		</if>
+		
 		ORDER BY p.id
 	</select>
   

@@ -21,8 +21,8 @@ public class ProductService {
 	}
 	
 	public List<ProductListDto> searchByStoreIdAndProductName(Integer storeId,
-										String productName,Integer mainCategoryId){
-		return productMapper.searchByStoreIdAndProductName(storeId, productName, mainCategoryId);
+										String productName,Integer mainCategoryId, Integer subCategoryId){
+		return productMapper.searchByStoreIdAndProductName(storeId, productName, mainCategoryId, subCategoryId);
 	}
 
 }

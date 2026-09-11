@@ -63,4 +63,9 @@ public class AdminService {
 	public Admin findById(Integer id) {
 		return adminMapper.findById(id);
 	}
+	
+	//TOP画面に「管理者姓名」と「店舗名」を表示
+	public AdminDetailDto findAdminNameAndStoreNameById(Integer id) {
+		return adminMapper.findAdminNameAndStoreNameById(id);
+	}
 }

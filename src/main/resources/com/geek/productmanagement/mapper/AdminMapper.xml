@@ -86,5 +86,17 @@
     	FROM admins
     	WHERE id = #{id}
     </select>
+    
+    <!-- TOP画面に表示する「管理者姓名」と「店舗名」を取得 -->
+    <select id="findAdminNameAndStoreNameById" resultType="com.geek.productmanagement.dto.AdminDetailDto">
+    	SELECT a.last_name, a.first_name, s.store_name 
+    	
+    	From admins a 
+    	
+    	INNER JOIN stores s 
+    	ON a.store_id = s.id
+    	
+    	WHERE a.id = #{adminId}
+    </select>
 
 </mapper>

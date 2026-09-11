@@ -12,4 +12,15 @@
   		
   		ORDER BY mc.id 
   	</select>
+  	
+  	<!-- 中カテゴリ取得 -->
+  	<select id="findSubCategoriesByMainCategoryId" resultType="com.geek.productmanagement.entity.SubCategory">
+  		SELECT sc.id, sc.sub_category_name 
+  		
+  		FROM sub_categories sc
+  		
+  		WHERE sc.main_category_id = #{mainCategoryId}
+  		
+  		ORDER BY sc.id
+  	</select>
   </mapper>

@@ -21,6 +21,15 @@
 									and mainCategory.id == mainCategoryId}">
 					</option>
 				</select>
+				<select id="subCategoryId" name="subCategoryId">
+					<option value="">中カテゴリ一覧</option>
+					<option th:each="subCategory:${subCategoryList}"
+							th:value="${subCategory.id}"
+							th:text="${subCategory.subCategoryName}"
+							th:selected="${subCategoryId != null
+									and subCategory.id == subCategoryId}">
+					</option>
+				</select>
 			<button type="submit">検索</button>
 		</form>
 		<table border="1">

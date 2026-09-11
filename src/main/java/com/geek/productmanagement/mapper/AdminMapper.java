@@ -3,6 +3,7 @@ package com.geek.productmanagement.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.dto.AdminListDto;
@@ -30,4 +31,9 @@ public interface AdminMapper {
 	
 	//管理者編集画面に「初期値＝現在の管理者情報」を表示するメソッド
 	Admin findById(Integer id); 
+	
+	//TOP画面に「管理者姓名」と「店舗名」を表示するメソッド
+	AdminDetailDto findAdminNameAndStoreNameById(
+			@Param("adminId")Integer id);
+	
 }
