@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace = 'com.geek.productmanagement.mapper.ProductMapper'>
+	<select id = 'findAllByStoreId' resultType = 'com.geek.productmanagement.dto.ProductListDto'>
+		SELECT p.id, p.product_name, p.product_image ,
+		cc.child_category_name, 
+		sp.store_price, sp.store_stock 
+		FROM store_products sp
+		
+		INNER JOIN products p
+		ON sp.product_id = p.id
+		
+		INNER JOIN child_categories cc 
+		ON p.child_category_id = cc.id
+		
+		WHERE sp.store_id = #{storeId}
+		
+		ORDER BY p.id
+		
+	</select>
+	
+	<select id="searchByStoreIdAndProductName" resultType="com.geek.productmanagement.dto.ProductListDto">
+		SELECT p.id, p.product_name, p.product_image, 
+		cc.child_category_name, 
+		sp.store_price, sp.store_stock 
+		
+		FROM store_products sp
+		
+		INNER JOIN products p
+		ON sp.product_id = p.id 
+		
+		INNER JOIN child_categories cc 
+		ON cc.id = p.child_category_id
+		
+		INNER JOIN sub_categories sc
+	    ON cc.sub_category_id = sc.id
+	    
+		INNER JOIN main_categories mc
+	    ON sc.main_category_id = mc.id
+		
+		WHERE sp.store_id = #{storeId} 
+		
+		<if test="productName != null and productName != '' ">
+			AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+		</if>  
+		
+		<if test="mainCategoryId != null">
+		    AND mc.id = #{mainCategoryId}
+		</if>
+		
+		<if test="subCategoryId != null">
+			AND sc.id = #{subCategoryId}
+		</if>
+		
+		ORDER BY p.id
+	</select>
+  
+</mapper>
