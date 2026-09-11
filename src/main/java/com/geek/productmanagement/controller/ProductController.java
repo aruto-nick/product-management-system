@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.ProductListDto;
 import com.geek.productmanagement.entity.Admin;
+import com.geek.productmanagement.entity.ChildCategory;
 import com.geek.productmanagement.entity.MainCategory;
 import com.geek.productmanagement.entity.SubCategory;
 import com.geek.productmanagement.service.AdminService;
@@ -35,6 +36,7 @@ public class ProductController {
 	String showProductList(@RequestParam(required = false) String productName, 
 							@RequestParam(required = false) Integer mainCategoryId,
 							@RequestParam(required = false) Integer subCategoryId,
+							@RequestParam(required = false) Integer childCategoryId,
 						Authentication authentication, Model model) {
 		
 		//ログイン管理者のメルアド取得
@@ -58,6 +60,12 @@ public class ProductController {
 		//中カテゴリ一覧をmodelに格納
 		model.addAttribute("subCategoryList", subCategoryList);
 		
+		//小カテゴリ一覧を取得
+		List<ChildCategory> childCategoryList = categoryService.findChildCategoriesBySubCategoryId(subCategoryId);
+		
+		//小カテゴリ一覧をmodelに格納
+		model.addAttribute("childCategoryList", childCategoryList);
+		
 		//所属店舗の商品一覧情報を取得
 		List<ProductListDto> productList = productService.searchByStoreIdAndProductName(storeId,productName,mainCategoryId,subCategoryId);
 		
@@ -72,6 +80,9 @@ public class ProductController {
 		
 		//中カテゴリIDを格納
 		model.addAttribute("subCategoryId", subCategoryId);
+		
+		//小カテゴリIDを格納
+		model.addAttribute("childCategoryId", childCategoryId);
 		
 		return "product-list";
 	}

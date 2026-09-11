@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.geek.productmanagement.entity.ChildCategory;
 import com.geek.productmanagement.entity.MainCategory;
 import com.geek.productmanagement.entity.SubCategory;
 
@@ -16,6 +17,11 @@ public interface CategoryMapper {
 	//中カテゴリ一覧取得メソッド
 	List<SubCategory> findSubCategoriesByMainCategoryId(
 			@Param("mainCategoryId")Integer mainCategoryId);
+	
+	//小カテゴリ一覧取得メソッド
+	List<ChildCategory> findChildCategoriesBySubCategoryId(
+		@Param("subCategoryId")Integer subCategoryId);
+	
 	
 
 }

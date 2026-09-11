@@ -23,4 +23,15 @@
   		
   		ORDER BY sc.id
   	</select>
+  	
+  	<!-- 小カテゴリ一覧取得→小カテゴリ検索で表示のため -->
+  	<select id="findChildCategoriesBySubCategoryId" resultType="com.geek.productmanagement.entity.ChildCategory">
+  		SELECT cc.id, cc.child_category_name 
+  		
+  		FROM child_categories cc 
+  		
+  		WHERE cc.sub_category_id = #{subCategoryId}
+  		
+  		ORDER BY cc.id
+  	</select>
   </mapper>

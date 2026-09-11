@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.geek.productmanagement.entity.ChildCategory;
 import com.geek.productmanagement.entity.MainCategory;
 import com.geek.productmanagement.entity.SubCategory;
 import com.geek.productmanagement.mapper.CategoryMapper;
@@ -24,6 +25,11 @@ public class CategoryService {
 	//中カテゴリ情報取得
 	public List<SubCategory> findSubCategoriesByMainCategoryId(Integer mainCategoryId){
 		return categoryMapper.findSubCategoriesByMainCategoryId(mainCategoryId);
+	}
+	
+	//小カテゴリ情報取得
+	public List<ChildCategory> findChildCategoriesBySubCategoryId(Integer subCategoryId){
+		return categoryMapper.findChildCategoriesBySubCategoryId(subCategoryId);
 	}
 
 }
