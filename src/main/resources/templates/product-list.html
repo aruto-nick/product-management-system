@@ -69,7 +69,7 @@
 					<td th:text="${product.storePrice}"></td>
 					<td th:text="${product.storeStock}"></td>
 					<td class="">
-						<a>
+						<a th:href="@{/product-detail(productId=${product.id})}">
 							詳細
 						</a>
 					</td>

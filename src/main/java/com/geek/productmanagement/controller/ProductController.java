@@ -110,6 +110,12 @@ public class ProductController {
 		return "product-list";
 	}
 	
+	//商品詳細画面
+	@GetMapping("product-detail")
+	String showProductDetail(
+			@RequestParam Integer productId) {
+		return "product-detail";
+	}
 	
 
 }
