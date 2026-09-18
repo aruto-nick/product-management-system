@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
 import com.geek.productmanagement.entity.Admin;
 import com.geek.productmanagement.entity.ChildCategory;
@@ -111,9 +112,24 @@ public class ProductController {
 	}
 	
 	//商品詳細画面
-	@GetMapping("product-detail")
+	@GetMapping("/product-detail")
 	String showProductDetail(
-			@RequestParam Integer productId) {
+			@RequestParam("productId") Integer productId,Authentication authentication,Model model) {
+		//ログイン管理者のメルアド取得
+		String loginEmail = authentication.getName();
+		
+		//メルアドから管理者情報を取得
+		Admin loginAdmin = adminService.findByEmail(loginEmail);
+		
+		//管理者情報から店舗ID取得
+		Integer storeId = loginAdmin.getStoreId();
+		
+		//商品詳細情報取得
+		ProductDetailDto productDetailDto = productService.findProductDetailById(storeId, productId);
+		
+		//商品詳細情報を格納
+		model.addAttribute("productDetailDto", productDetailDto);
+		
 		return "product-detail";
 	}
 	

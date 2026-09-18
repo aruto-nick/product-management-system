@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
 
 @Mapper
@@ -30,4 +31,9 @@ public interface ProductMapper {
 			@Param("mainCategoryId")Integer mainCategoryId,
 			@Param("subCategoryId")Integer subCategoryId,
 			@Param("childCategoryId") Integer childCategoryId);
+	
+	//商品詳細画面の項目取得
+	public ProductDetailDto findProductDetailById(
+			@Param("storeId")Integer storeId,
+			@Param("productId")Integer productId);
 }

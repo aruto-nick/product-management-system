@@ -103,5 +103,30 @@
 		
 	</select>
 	
+	<select id="findProductDetailById" resultType="com.geek.productmanagement.dto.ProductDetailDto">
+		SELECT p.id, p.product_image, p.product_name, p.product_explanation, p.purchase_cost, p.maker_price,
+				mc.main_category_name, sc.sub_category_name, cc.child_category_name, sp.store_price, sp.store_stock,m.maker_name
+		
+		FROM products p
+		
+		INNER JOIN child_categories cc
+		ON p.child_category_id = cc.id
+		
+		INNER JOIN sub_categories sc
+		ON cc.sub_category_id = sc.id
+		
+		INNER JOIN main_categories mc
+		ON sc.main_category_id = mc.id
+		
+		INNER JOIN store_products sp
+		ON sp.product_id = p.id
+		
+		INNER JOIN maker m
+		ON p.maker_id = m.id
+		
+		WHERE sp.store_id = #{storeId} 
+		AND sp.product_id = #{productId}
+		
+	</select>
   
 </mapper>

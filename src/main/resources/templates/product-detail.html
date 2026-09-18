@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://ww.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8" />
 		<title>商品詳細画面</title>
 	</head>
 	<body>
-		<h1>商品遷移画面</h1>
+		<h1>商品詳細画面</h1>
+		<table border="1">
+			
+			<thead>
+				<tr>
+					<th>商品画像</th>
+					<th>商品名</th>
+					<th>大カテゴリ</th>
+					<th>中カテゴリ</th>
+					<th>小カテゴリ</th>
+					<th>メーカー名</th>
+					<th>商品説明</th>
+					<th>原価</th>
+					<th>メーカー価格</th>
+					<th>店舗価格</th>
+					<th>在庫数</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr>
+					<td>
+						<img th:src = "@{'/images/products/' + ${productDetailDto.productImage} }"
+							width="100">
+					</td>
+					<td th:text="${productDetailDto.productName}"></td>
+					<td th:text="${productDetailDto.mainCategoryName}"></td>
+					<td th:text="${productDetailDto.subCategoryName}"></td>
+					<td th:text="${productDetailDto.childCategoryName}"></td>
+					<td th:text="${productDetailDto.makerName}"></td>
+					<td th:text="${productDetailDto.productExplanation}"></td>
+					<td th:text="${productDetailDto.purchaseCost}"></td>
+					<td th:text="${productDetailDto.makerPrice}"></td>
+					<td th:text="${productDetailDto.storePrice}"></td>
+					<td th:text="${productDetailDto.storeStock}"></td>
+				</tr>
+			</tbody>
+		</table>
 	</body>
 </html>
