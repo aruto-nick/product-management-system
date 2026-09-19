@@ -128,5 +128,18 @@
 		AND sp.product_id = #{productId}
 		
 	</select>
+	
+	<!-- 商品発注画面の表示項目取得 -->
+	<select id="findProductOrder" resultType="com.geek.productmanagement.dto.ProductOrderDto">
+		SELECT p.id, p.product_image, p.product_name, p.purchase_cost,sp.store_stock
+		
+		FROM products p
+		
+		INNER JOIN store_products sp
+		ON p.id = sp.product_id
+		
+		WHERE sp.store_id = #{storeId}
+		AND sp.product_id = #{productId}
+	</select>
   
 </mapper>

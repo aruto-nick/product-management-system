@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>商品発注画面</title>
+		<meta charset="UTF-8" />
+	</head>
+	<body>
+		<h1>商品発注</h1>
+	</body>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>商品画像</th>
+				<th>商品名</th>
+				<th>現在の在庫数</th>
+				<th>仕入れ原価</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<img th:src="@{'/images/products/'+${productOrderDto.productImage}}"
+						width="100">
+				</td>
+				<td th:text="${productOrderDto.productName}"></td>
+				<td th:text="${productOrderDto.storeStock}"></td>
+				<td th:text="${productOrderDto.purchaseCost}"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<form method="post">
+		<div>
+			<label>発注数</label>
+			<input required> 
+		</div> 
+		<div>
+			<span>合計金額</span>
+		</div>
+		<button type="submit">発注</button>
+	</form>
+</html>

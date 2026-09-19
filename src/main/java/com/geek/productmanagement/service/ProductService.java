@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
+import com.geek.productmanagement.dto.ProductOrderDto;
 import com.geek.productmanagement.mapper.ProductMapper;
 
 
@@ -40,6 +41,11 @@ public class ProductService {
 	//商品詳細画面に表示
 	public ProductDetailDto findProductDetailById(Integer storeId, Integer productId) {
 		return productMapper.findProductDetailById(storeId, productId);
+	}
+	
+	//商品発注画面の表示
+	public ProductOrderDto findProductOrder(Integer storeId, Integer productId) {
+		return productMapper.findProductOrder(storeId, productId);
 	}
 
 }

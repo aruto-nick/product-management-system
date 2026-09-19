@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
+import com.geek.productmanagement.dto.ProductOrderDto;
 
 @Mapper
 public interface ProductMapper {
@@ -34,6 +35,11 @@ public interface ProductMapper {
 	
 	//商品詳細画面の項目取得
 	public ProductDetailDto findProductDetailById(
+			@Param("storeId")Integer storeId,
+			@Param("productId")Integer productId);
+	
+	//商品発注画面の表示項目を取得
+	public ProductOrderDto findProductOrder(
 			@Param("storeId")Integer storeId,
 			@Param("productId")Integer productId);
 }

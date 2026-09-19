@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
+import com.geek.productmanagement.dto.ProductOrderDto;
 import com.geek.productmanagement.entity.Admin;
 import com.geek.productmanagement.entity.ChildCategory;
 import com.geek.productmanagement.entity.MainCategory;
@@ -131,6 +132,29 @@ public class ProductController {
 		model.addAttribute("productDetailDto", productDetailDto);
 		
 		return "product-detail";
+	}
+	
+	//商品発注画面遷移
+	@GetMapping("/product-order")
+	String showProductOrder(Authentication authentication,Model model,
+			@RequestParam("productId") Integer productId) {
+		
+		//ログイン管理者のメルアド取得
+		String loginEmail = authentication.getName();
+		
+		//メルアドから管理者情報取得
+		Admin loginAdmin = adminService.findByEmail(loginEmail);
+		
+		//管理者情報から店舗IDを取得
+		Integer storeId = loginAdmin.getStoreId();
+		
+		//店舗IDと商品IDを基に、発注商品の情報取得
+		ProductOrderDto productOrderDto = productService.findProductOrder(storeId, productId);
+		
+		//発注商品情報を格納
+		model.addAttribute("productOrderDto", productOrderDto);
+		
+		return "product-order";
 	}
 	
 

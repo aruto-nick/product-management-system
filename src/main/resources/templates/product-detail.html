@@ -21,6 +21,7 @@
 					<th>メーカー価格</th>
 					<th>店舗価格</th>
 					<th>在庫数</th>
+					<th>操作</th>
 				</tr>
 			</thead>
 			
@@ -40,6 +41,9 @@
 					<td th:text="${productDetailDto.makerPrice}"></td>
 					<td th:text="${productDetailDto.storePrice}"></td>
 					<td th:text="${productDetailDto.storeStock}"></td>
+					<td>
+						<a th:href="@{/product-order(productId=${productDetailDto.id})}">発注</a>
+					</td>
 				</tr>
 			</tbody>
 		</table>
