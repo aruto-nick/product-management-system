@@ -155,5 +155,23 @@
 		INSERT INTO order_histories (admin_id, store_id, product_id, order_number, sum_price) 
 		VALUES (#{adminId}, #{storeId}, #{productId}, #{orderNumber}, #{sumPrice})
 	</insert>
+	
+	<!-- 商品発注履歴の取得 -->
+	<select id="findOrderHistories" resultType="com.geek.productmanagement.dto.ProductOrderHistoryDto">
+		SELECT p.product_name, p.product_image,a.last_name,a.first_name,
+				oh.id, oh.order_number, oh.sum_price,oh.created_at, oh.sum_price DIV oh.order_number AS purchaseCost
+				
+		FROM products p
+		
+		INNER JOIN order_histories oh
+		ON p.id = oh.product_id
+		
+		INNER JOIN admins a
+		ON a.id = oh.admin_id
+		
+		WHERE oh.store_id = #{storeId}
+		
+		ORDER BY oh.created_at DESC
+	</select>
   
 </mapper>

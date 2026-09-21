@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
 import com.geek.productmanagement.dto.ProductOrderDto;
+import com.geek.productmanagement.dto.ProductOrderHistoryDto;
 import com.geek.productmanagement.mapper.ProductMapper;
 
 
@@ -83,6 +84,11 @@ public class ProductService {
 			throw new IllegalArgumentException("発注履歴を登録できませんでした");
 		}
 		
+	}
+	
+	//発注履歴の取得
+	public List<ProductOrderHistoryDto> findOrderHistories(Integer storeId) {
+		return productMapper.findOrderHistories(storeId);
 	}
 	
 

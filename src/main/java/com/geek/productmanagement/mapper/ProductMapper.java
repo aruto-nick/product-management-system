@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
 import com.geek.productmanagement.dto.ProductOrderDto;
+import com.geek.productmanagement.dto.ProductOrderHistoryDto;
 
 @Mapper
 public interface ProductMapper {
@@ -56,4 +57,8 @@ public interface ProductMapper {
 			@Param ("adminId") Integer adminId,
 			@Param("orderNumber") Integer orderNumber,
 			@Param("sumPrice") Integer sumPrice);
+	
+	//	商品発注履歴取得
+	List<ProductOrderHistoryDto> findOrderHistories(
+			@Param("storeId") Integer storeId);
 }

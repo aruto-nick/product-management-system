@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="UTF-8" />
 		<title>商品発注履歴</title>
 	</head>
 	<body>
 		<h1>商品発注履歴</h1>
+		<table border="1">
+			
+			<thead>
+				<tr>
+					<th>発注日時</th>
+					<th>商品画像</th>
+					<th>商品名</th>
+					<th>仕入原価</th>
+					<th>発注数</th>
+					<th>合計金額</th>
+					<th>発注者姓名</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<!-- 発注履歴ありの場合 -->
+				<tr th:each="productOrderHistoryDto: ${productOrderHistoryList}">
+					<td th:text="${#temporals.format(
+								productOrderHistoryDto.createdAt,
+								'yyyy-MM-dd HH:mm')}"></td>
+					<td>
+						<img th:src="@{'/images/products/' + ${productOrderHistoryDto.productImage} }"
+							width="100">
+					</td>
+					<td th:text="${productOrderHistoryDto.productName}"></td>
+					<td th:text="${productOrderHistoryDto.purchaseCost}"></td>
+					<td th:text="${productOrderHistoryDto.orderNumber}"></td>
+					<td th:text="${productOrderHistoryDto.sumPrice}"></td>
+					<td th:text="${productOrderHistoryDto.lastName 
+									+ '　' 
+									+ productOrderHistoryDto.firstName}"></td>
+				</tr>
+				
+				<!-- 発注履歴なしの場合 -->
+				<tr th:if="${#lists.isEmpty(productOrderHistoryList)}">
+					<td colspan="7">発注履歴がありませんでした</td>
+				</tr>
+			</tbody>
+			
+		</table>
 	</body>
 </html>
