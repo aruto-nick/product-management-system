@@ -42,4 +42,18 @@ public interface ProductMapper {
 	public ProductOrderDto findProductOrder(
 			@Param("storeId")Integer storeId,
 			@Param("productId")Integer productId);
+	
+	//発注画面：①在庫数＋発注数にDB更新
+	int increaseStoreStock(
+			@Param("storeId") Integer storeId,
+			@Param("productId") Integer productId,
+			@Param("orderNumber") Integer orderNumber);
+	
+	//発注画面:②在庫履歴をDB登録
+	int insertOrderHistory(
+			@Param ("storeId") Integer storeId,
+			@Param ("productId") Integer productId,
+			@Param ("adminId") Integer adminId,
+			@Param("orderNumber") Integer orderNumber,
+			@Param("sumPrice") Integer sumPrice);
 }

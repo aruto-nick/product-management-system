@@ -141,5 +141,19 @@
 		WHERE sp.store_id = #{storeId}
 		AND sp.product_id = #{productId}
 	</select>
+	
+	<!-- ①在庫数＋発注数をDB更新 -->
+	<update id="increaseStoreStock">
+		UPDATE store_products 
+		SET store_stock = store_stock + #{orderNumber} 
+		WHERE store_id = #{storeId} 
+		AND product_id = #{productId}
+	</update>
+	
+	<!-- ②発注履歴のDB登録 -->
+	<insert id="insertOrderHistory">
+		INSERT INTO order_histories (admin_id, store_id, product_id, order_number, sum_price) 
+		VALUES (#{adminId}, #{storeId}, #{productId}, #{orderNumber}, #{sumPrice})
+	</insert>
   
 </mapper>

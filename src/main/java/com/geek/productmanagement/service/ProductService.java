@@ -3,6 +3,7 @@ package com.geek.productmanagement.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.geek.productmanagement.dto.ProductDetailDto;
 import com.geek.productmanagement.dto.ProductListDto;
@@ -47,5 +48,43 @@ public class ProductService {
 	public ProductOrderDto findProductOrder(Integer storeId, Integer productId) {
 		return productMapper.findProductOrder(storeId, productId);
 	}
+	
+	//発注メソッド①と②を１つにまとめる
+	@Transactional
+	public void orderProduct(Integer adminId, Integer storeId, Integer productId, Integer orderNumber) {
+		
+		//発注数の入力チェック
+		if (orderNumber == null || orderNumber <= 0) {
+			throw new IllegalArgumentException("発注数は１以上で入力してください");
+		}
+		
+		//DBから商品の仕入れ原価を取得
+		ProductOrderDto productOrderDto = productMapper.findProductOrder(storeId, productId);
+		
+		//商品IDが不正な場合　(例)別店舗の商品IDなど
+		if (productOrderDto == null) {
+			throw new IllegalArgumentException("発注対象の商品が存在しません");
+		}
+		
+		//合計金額＝仕入れ金額×発注数
+		Integer sumPrice = productOrderDto.getPurchaseCost() * orderNumber;
+		
+		//①在庫数を発注数分増やす
+		int updateRows = productMapper.increaseStoreStock(storeId, productId, orderNumber);
+		
+		if (updateRows != 1) {
+			throw new IllegalArgumentException("在庫数を更新できませんでした");
+		}
+		
+		//②発注履歴を登録
+		int insertedRows = productMapper.insertOrderHistory(storeId, productId, adminId, orderNumber, sumPrice);
+		
+		if (insertedRows != 1) {
+			throw new IllegalArgumentException("発注履歴を登録できませんでした");
+		}
+		
+	}
+	
+
 
 }

@@ -6,37 +6,67 @@
 	</head>
 	<body>
 		<h1>商品発注</h1>
+			<table border="1">
+				<thead>
+					<tr>
+						<th>商品画像</th>
+						<th>商品名</th>
+						<th>現在の在庫数</th>
+						<th>仕入れ原価</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<img th:src="@{'/images/products/'+${productOrderDto.productImage}}"
+								width="100">
+						</td>
+						<td th:text="${productOrderDto.productName}"></td>
+						<td th:text="${productOrderDto.storeStock}"></td>
+						<td th:text="${productOrderDto.purchaseCost}" id="purchaseCost"></td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<form th:action="@{/product-order}" method="post">
+				<!-- productIdをControllerに送信する -->
+				<input type="hidden" name="productId" th:value="${productOrderDto.id}">
+				
+				<div>
+					<label>発注数</label>
+					<input type="number" id="orderNumber" name="orderNumber" min="1" required> 
+				</div> 
+				
+				<!-- 合計金額を反映させるjs -->
+				<div>
+					<span>合計金額:</span>
+					<span id="sumPrice">0</span>
+					<span>円</span>
+				</div>
+				
+				<button type="submit">発注</button>
+			</form>
+			
+			<script>
+				//HTML要素を取得
+				const purchaseCostElement = document.getElementById('purchaseCost');
+				const orderNumberElement = document.getElementById('orderNumber');
+				const sumPriceElement = document.getElementById('sumPrice');
+				
+				//発注数入力の度に計算
+				orderNumberElement.addEventListener('input', function(){
+					
+					//合計金額＝仕入れ金額×発注数
+					const purchaseCost = Number(purchaseCostElement.textContent);
+					const orderNumber = Number(orderNumberElement.value);
+					const total = purchaseCost * orderNumber;
+					
+					//
+					sumPriceElement.textContent = total.toLocaleString();
+				});
+				
+
+			</script>
 	</body>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>商品画像</th>
-				<th>商品名</th>
-				<th>現在の在庫数</th>
-				<th>仕入れ原価</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<img th:src="@{'/images/products/'+${productOrderDto.productImage}}"
-						width="100">
-				</td>
-				<td th:text="${productOrderDto.productName}"></td>
-				<td th:text="${productOrderDto.storeStock}"></td>
-				<td th:text="${productOrderDto.purchaseCost}"></td>
-			</tr>
-		</tbody>
-	</table>
-	
-	<form method="post">
-		<div>
-			<label>発注数</label>
-			<input required> 
-		</div> 
-		<div>
-			<span>合計金額</span>
-		</div>
-		<button type="submit">発注</button>
-	</form>
+
 </html>

@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.ProductDetailDto;
@@ -157,5 +158,31 @@ public class ProductController {
 		return "product-order";
 	}
 	
+	//商品発注機能
+	@PostMapping("/product-order")
+	String registerOrderNumbers(@RequestParam("productId") Integer productId,
+								@RequestParam("orderNumber") Integer orderNumber,
+								Authentication authentication) {
+		
+		//【ログイン管理者からadminIDとstoreIdを取得】
+		//ログイン管理者のメルアド取得
+		String loginEmil = authentication.getName();
+		
+		//ログイン管理者の情報取得
+		Admin loginadmin = adminService.findByEmail(loginEmil);
+		
+		//ログイン管理者の店舗ID取得
+		Integer storeId = loginadmin.getStoreId();
+		
+		//ログイン管理者の管理者ID取得
+		Integer adminId = loginadmin.getId();
+		
+		//ServiceからorderProduct()メソッドを呼び出す
+		productService.orderProduct(adminId, storeId, productId, orderNumber);
+		
+		//発注処理後、更新後の在庫数を取得した後に、商品発注画面表示
+		return "redirect:/product-order?productId=" + productId + "&success";
+		
+	}
 
 }
