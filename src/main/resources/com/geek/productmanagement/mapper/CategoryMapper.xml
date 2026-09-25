@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace='com.geek.productmanagement.mapper.CategoryMapper'>
+  	<select id="findAllMainCategories" resultType="com.geek.productmanagement.entity.MainCategory">
+  		SELECT mc.id, mc.main_category_name
+  		
+  		FROM main_categories mc	
+  		
+  		ORDER BY mc.id 
+  	</select>
+  	
+  	<!-- 中カテゴリ取得 -->
+  	<select id="findSubCategoriesByMainCategoryId" resultType="com.geek.productmanagement.entity.SubCategory">
+  		SELECT sc.id, sc.sub_category_name 
+  		
+  		FROM sub_categories sc
+  		
+  		WHERE sc.main_category_id = #{mainCategoryId}
+  		
+  		ORDER BY sc.id
+  	</select>
+  	
+  	<!-- 小カテゴリ一覧取得→小カテゴリ検索で表示のため -->
+  	<select id="findChildCategoriesBySubCategoryId" resultType="com.geek.productmanagement.entity.ChildCategory">
+  		SELECT cc.id, cc.child_category_name 
+  		
+  		FROM child_categories cc 
+  		
+  		WHERE cc.sub_category_id = #{subCategoryId}
+  		
+  		ORDER BY cc.id
+  	</select>
+  </mapper>

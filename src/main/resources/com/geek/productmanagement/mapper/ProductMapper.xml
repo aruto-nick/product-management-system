@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace = 'com.geek.productmanagement.mapper.ProductMapper'>
+	<select id = 'findAllByStoreId' resultType = 'com.geek.productmanagement.dto.ProductListDto'>
+		SELECT p.id, p.product_name, p.product_image ,
+		cc.child_category_name, 
+		sp.store_price, sp.store_stock 
+		FROM store_products sp
+		
+		INNER JOIN products p
+		ON sp.product_id = p.id
+		
+		INNER JOIN child_categories cc 
+		ON p.child_category_id = cc.id
+		
+		WHERE sp.store_id = #{storeId}
+		
+		ORDER BY p.id
+		
+	</select>
+	
+	<select id="searchByStoreIdAndProductName" resultType="com.geek.productmanagement.dto.ProductListDto">
+		SELECT p.id, p.product_name, p.product_image, 
+		cc.child_category_name, 
+		sp.store_price, sp.store_stock 
+		
+		FROM store_products sp
+		
+		INNER JOIN products p
+		ON sp.product_id = p.id 
+		
+		INNER JOIN child_categories cc 
+		ON cc.id = p.child_category_id
+		
+		INNER JOIN sub_categories sc
+	    ON cc.sub_category_id = sc.id
+	    
+		INNER JOIN main_categories mc
+	    ON sc.main_category_id = mc.id
+		
+		WHERE sp.store_id = #{storeId} 
+		
+		<if test="productName != null and productName != '' ">
+			AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+		</if>  
+		
+		<if test="mainCategoryId != null">
+		    AND mc.id = #{mainCategoryId}
+		</if>
+		
+		<if test="subCategoryId != null">
+			AND sc.id = #{subCategoryId}
+		</if>
+		
+		<if test="childCategoryId != null">
+			AND cc.id = #{childCategoryId}
+		</if>
+		
+		ORDER BY p.id
+		
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+	
+	<!-- 商品一覧画面の総商品数をカウント -->
+	<select id="countProducts" resultType="java.lang.Integer">
+		SELECT COUNT(p.id) 
+		
+		FROM store_products sp
+		
+		INNER JOIN products p
+		ON sp.product_id = p.id 
+		
+		INNER JOIN child_categories cc 
+		ON cc.id = p.child_category_id
+		
+		INNER JOIN sub_categories sc
+	    ON cc.sub_category_id = sc.id
+	    
+		INNER JOIN main_categories mc
+	    ON sc.main_category_id = mc.id
+		
+		WHERE sp.store_id = #{storeId} 
+		
+		<if test="productName != null and productName != '' ">
+			AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+		</if>  
+		
+		<if test="mainCategoryId != null">
+		    AND mc.id = #{mainCategoryId}
+		</if>
+		
+		<if test="subCategoryId != null">
+			AND sc.id = #{subCategoryId}
+		</if>
+		
+		<if test="childCategoryId != null">
+			AND cc.id = #{childCategoryId}
+		</if>
+		
+	</select>
+	
+	<select id="findProductDetailById" resultType="com.geek.productmanagement.dto.ProductDetailDto">
+		SELECT p.id, p.product_image, p.product_name, p.product_explanation, p.purchase_cost, p.maker_price,
+				mc.main_category_name, sc.sub_category_name, cc.child_category_name, sp.store_price, sp.store_stock,m.maker_name
+		
+		FROM products p
+		
+		INNER JOIN child_categories cc
+		ON p.child_category_id = cc.id
+		
+		INNER JOIN sub_categories sc
+		ON cc.sub_category_id = sc.id
+		
+		INNER JOIN main_categories mc
+		ON sc.main_category_id = mc.id
+		
+		INNER JOIN store_products sp
+		ON sp.product_id = p.id
+		
+		INNER JOIN maker m
+		ON p.maker_id = m.id
+		
+		WHERE sp.store_id = #{storeId} 
+		AND sp.product_id = #{productId}
+		
+	</select>
+	
+	<!-- 商品発注画面の表示項目取得 -->
+	<select id="findProductOrder" resultType="com.geek.productmanagement.dto.ProductOrderDto">
+		SELECT p.id, p.product_image, p.product_name, p.purchase_cost,sp.store_stock
+		
+		FROM products p
+		
+		INNER JOIN store_products sp
+		ON p.id = sp.product_id
+		
+		WHERE sp.store_id = #{storeId}
+		AND sp.product_id = #{productId}
+	</select>
+	
+	<!-- ①在庫数＋発注数をDB更新 -->
+	<update id="increaseStoreStock">
+		UPDATE store_products 
+		SET store_stock = store_stock + #{orderNumber} 
+		WHERE store_id = #{storeId} 
+		AND product_id = #{productId}
+	</update>
+	
+	<!-- ②発注履歴のDB登録 -->
+	<insert id="insertOrderHistory">
+		INSERT INTO order_histories (admin_id, store_id, product_id, order_number, sum_price) 
+		VALUES (#{adminId}, #{storeId}, #{productId}, #{orderNumber}, #{sumPrice})
+	</insert>
+	
+	<!-- 商品発注履歴の取得 -->
+	<select id="findOrderHistories" resultType="com.geek.productmanagement.dto.ProductOrderHistoryDto">
+		SELECT p.product_name, p.product_image,a.last_name,a.first_name,
+				oh.id, oh.order_number, oh.sum_price,oh.created_at, oh.sum_price DIV oh.order_number AS purchaseCost
+				
+		FROM products p
+		
+		INNER JOIN order_histories oh
+		ON p.id = oh.product_id
+		
+		INNER JOIN admins a
+		ON a.id = oh.admin_id
+		
+		WHERE oh.store_id = #{storeId}
+		
+		ORDER BY oh.created_at DESC
+	</select>
+  
+</mapper>
