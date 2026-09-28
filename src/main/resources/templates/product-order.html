@@ -6,6 +6,11 @@
 	</head>
 	<body>
 		<h1>商品発注</h1>
+		
+		<!-- 発注後のメッセージ表示 -->
+		<div th:if="${param.success}">
+			<p>商品の発注が完了しました</p>
+		</div>
 			<table border="1">
 				<thead>
 					<tr>
