@@ -21,7 +21,7 @@ public class SecurityConfig {
 		//管理者のみ権限：管理者登録・編集・「削除機能」
 		http.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/login","/access-denied").permitAll()
-				.requestMatchers("/admin-register","/admin-edit")
+				.requestMatchers("/admin-register","/admin-edit","/product-order")
 				.hasRole("ADMIN")
 				.requestMatchers(HttpMethod.POST,"/admin-delete")
 				.hasRole("ADMIN")
