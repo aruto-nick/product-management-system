@@ -6,6 +6,12 @@
   </head>
   <body>
 	  <h1>管理者登録</h1>
+	  
+	  <!-- メールアドレス重複時はエラーメッセージ表示 -->
+	  <p th:if="${errorMessage}"
+		   th:text="${errorMessage}">
+	  </p>
+	  
 	  <form th:action="@{/admin/register}" method="post">
 		<select name="storeId" required>
 			<option value="">下記から選択</option>

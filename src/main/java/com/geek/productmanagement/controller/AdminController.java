@@ -1,5 +1,6 @@
 package com.geek.productmanagement.controller;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -58,7 +59,8 @@ public class AdminController {
 								@RequestParam Integer positionId,
 								@RequestParam Integer authorityId,
 								@RequestParam String phoneNumber,
-								@RequestParam String password) {
+								@RequestParam String password,
+								Model model) {
 		
 		//Adminオブジェクトを作成
 		Admin admin = new Admin();
@@ -73,15 +75,17 @@ public class AdminController {
 		admin.setPhoneNumber(phoneNumber);
 		admin.setPassword(password);
 		
-		//管理者登録を実行して、登録「件数」をresultに入れる
-		int result = adminService.insert(admin);
-		
-		//登録成功時、TOP画面に遷移
-		if(result == 1) {
-			return "redirect:/top";		
-		}else
-		//登録失敗時、管理者登録画面のまま遷移しない
-			{
+		try { 
+			//管理者情報登録に成功すると
+				adminService.insert(admin);
+			//TOP画面に遷移
+				return "redirect:/top";
+			//管理者情報重複により登録失敗すると
+		} catch (DuplicateKeyException e) {
+			//エラーメッセージ表示して
+			model.addAttribute("errorMessage", e.getMessage());
+			
+			//登録画面に遷移
 			return "admin-register";
 		}
 
