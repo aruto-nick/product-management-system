@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.entity.Admin;
 import com.geek.productmanagement.service.AdminAuthorityService;
 import com.geek.productmanagement.service.AdminPositionService;
@@ -112,14 +111,9 @@ public class AdminController {
 						HttpServletRequest request, HttpServletResponse response) {
 		//ログイン中管理者のメールアドレス取得&格納   by  CustomUserDetailsServiceにてメルアドをusernameとして設定してるため可能
 		String loginEmail = authentication.getName();
-		//管理者情報を取得して格納
-		AdminDetailDto deleteTarget = adminService.findDetailById(id);
-		//削除対象がログイン中の本人か確認:管理者情報あり＆ログインメルアドとメルアド一致
-		boolean deletingSelf = 
-				deleteTarget != null 
-				&& loginEmail.equals(deleteTarget.getEmail());
-		//管理者情報を削除
-		adminService.deleteById(id);
+		
+		boolean deletingSelf = adminService.deleteById(id, loginEmail);
+		
 		//自分自身を削除した場合
 		if(deletingSelf) {
 			

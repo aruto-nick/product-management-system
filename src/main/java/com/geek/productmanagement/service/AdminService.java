@@ -65,9 +65,21 @@ public class AdminService {
 	
 	//管理者詳細画面にて管理者データを「削除」する機能
 	@Transactional
-	public int deleteById(Integer id) {
+	public boolean deleteById(Integer id, String loginEmail) {
 		
-		return adminMapper.deleteById(id);
+		//削除対象の管理者情報を取得して
+		AdminDetailDto deleteTarget = adminMapper.findDetailById(id);
+		
+		//削除対象がログイン中の本人か確認:管理者情報あり＆ログインメルアドとメルアド一致
+		boolean deletingSelf = 
+				deleteTarget != null 
+				&& loginEmail.equals(deleteTarget.getEmail());
+		
+		//管理者情報を削除
+		adminMapper.deleteById(id);
+		
+		//本人を削除したかどうかをControllerへ返す
+		return deletingSelf;
 	}
 	
 	//管理者「編集」機能
