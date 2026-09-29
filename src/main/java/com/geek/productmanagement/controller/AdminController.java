@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 	//画面のドロップダウン方式のための３つのServiceクラスを使えるようにするため
 	private final AdminAuthorityService adminAuthorityService;	
@@ -39,7 +41,7 @@ public class AdminController {
 	
 	
 	//管理者登録画面に遷移
-	@GetMapping("/admin-register")
+	@GetMapping("/register")
 	String showAdminRegister(Model model) {
 		//Serviceから取得したデータをModelに入れる
 		model.addAttribute("authorities", adminAuthorityService.findAll());
@@ -48,7 +50,7 @@ public class AdminController {
 		return "admin-register";
 	}
 	
-	@PostMapping("/admin-register")
+	@PostMapping("/register")
 	String connectAdminService(@RequestParam Integer storeId,
 								@RequestParam String lastName,
 								@RequestParam String firstName,
@@ -86,7 +88,7 @@ public class AdminController {
 	}
 
 	//管理者一覧画面に遷移
-	@GetMapping("/admin-list")
+	@GetMapping("/list")
 	String showAdminList(Model model) {
 		//Serviceから取得したデータをModelに格納。"admins"と名付け
 		model.addAttribute("admins", adminService.findAll());
@@ -94,14 +96,14 @@ public class AdminController {
 	}
 	
 	//管理者詳細画面に遷移
-	@GetMapping("/admin-detail")
+	@GetMapping("/detail")
 	String showAdminDetail(@RequestParam("id") Integer id,Model model) {
 		model.addAttribute("admin", adminService.findDetailById(id));
 		return "admin-detail";
 	}
 	
 	//管理者詳細画面の「削除機能」：削除＆ログアウト
-	@PostMapping("/admin-delete")
+	@PostMapping("/delete")
 	String deleteById(@RequestParam("id") Integer id,Authentication authentication,
 						HttpServletRequest request, HttpServletResponse response) {
 		//ログイン中管理者のメールアドレス取得&格納   by  CustomUserDetailsServiceにてメルアドをusernameとして設定してるため可能
@@ -124,11 +126,11 @@ public class AdminController {
 			return "redirect:/login";
 		}
 		//別の管理者削除の場合
-		return "redirect:/admin-list";
+		return "redirect:/admin/list";
 	}
 
 	//管理者編集画面の「初期画面」表示
-	@GetMapping("/admin-edit")
+	@GetMapping("/edit")
 	String showAdminEdit(@RequestParam("id") Integer id, Model model) {
 		//編集画面に表示する現在のデータ
 		model.addAttribute("admin", adminService.findById(id));
@@ -140,16 +142,16 @@ public class AdminController {
 	}
 	
 	// 管理者情報を更新
-	@PostMapping("/admin-edit")
+	@PostMapping("/edit")
 	String updateAdmin(@ModelAttribute Admin admin) {
 
 	    int result = adminService.updateById(admin);
 
 	    if (result == 1) {
-	        return "redirect:/admin-detail?id=" + admin.getId();
+	        return "redirect:/admin/detail?id=" + admin.getId();
 	    }
 
-	    return "redirect:/admin-edit?id=" + admin.getId();
+	    return "redirect:/admin/edit?id=" + admin.getId();
 	}
 	
 }
