@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.dto.AdminListDto;
@@ -29,11 +30,12 @@ public class AdminService {
 	}
 	
 	//管理者登録画面で入力したパスワードをハッシュ化した後に、Mapperに渡す
+	@Transactional
 	public int insert(Admin admin) {
 		//取得したパスワードをハッシュ化
-		String encodedPasseword = passwordEncoder.encode(admin.getPassword());
+		String encodedPassword = passwordEncoder.encode(admin.getPassword());
 		//Adminのパスワードをハッシュ化後の値に設定
-		admin.setPassword(encodedPasseword);
+		admin.setPassword(encodedPassword);
 		//ハッシュ化パスワードを含むAdminをMapperに渡す
 		return adminMapper.insert(admin);
 	}
@@ -49,12 +51,14 @@ public class AdminService {
 	}
 	
 	//管理者詳細画面にて管理者データを「削除」する機能
+	@Transactional
 	public int deleteById(Integer id) {
 		
 		return adminMapper.deleteById(id);
 	}
 	
 	//管理者「編集」機能
+	@Transactional
 	public int updateById(Admin admin) {
 		return adminMapper.updateById(admin);
 	}
