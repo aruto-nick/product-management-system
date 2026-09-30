@@ -33,6 +33,13 @@ public class AdminController {
 	private final StoreService storeService;
 	//AdminServiceクラスを使えるようにするため	
 	private final AdminService adminService;
+	
+	//modelに権限・役職・店舗を格納→管理者登録で使用するため
+	private void setAdminRegisterModel(Model model) {
+	    model.addAttribute("authorities", adminAuthorityService.findAll());
+	    model.addAttribute("positions", adminPositionService.findAll());
+	    model.addAttribute("stores", storeService.findAll());
+	}
 	public AdminController(AdminAuthorityService adminAuthorityService, 
 							AdminPositionService adminPositionService, 
 							StoreService storeService,
@@ -47,10 +54,13 @@ public class AdminController {
 	//管理者登録画面に遷移
 	@GetMapping("/register")
 	String showAdminRegister(Model model) {
-		//Serviceから取得したデータをModelに入れる
-		model.addAttribute("authorities", adminAuthorityService.findAll());
-		model.addAttribute("positions", adminPositionService.findAll());
-		model.addAttribute("stores", storeService.findAll());
+		
+		// 入力フォーム用の空オブジェクトを格納
+	    model.addAttribute("adminRegisterForm", new AdminRegisterForm());
+		
+		//権限・役職・店舗を表示
+		setAdminRegisterModel(model);
+		
 		return "admin-register";
 	}
 	
@@ -62,34 +72,27 @@ public class AdminController {
 	    // 入力エラーがある場合の処理		
 		if (bindingResult.hasErrors()) {
 			
-			model.addAttribute("authorities", adminAuthorityService.findAll());
-			model.addAttribute("positions", adminPositionService.findAll());
-			model.addAttribute("stores", storeService.findAll());
+			//権限・役職・店舗を表示
+			setAdminRegisterModel(model);
 			
 			return "admin-register";
 		}
 		
-		//Adminオブジェクトを作成
-		Admin admin = new Admin();
-		
-		admin.setLastName(adminRegisterForm.getLastName());
-		admin.setFirstName(adminRegisterForm.getFirstName());
-		admin.setEmail(adminRegisterForm.getEmail());
-		admin.setStoreId(adminRegisterForm.getStoreId());
-		admin.setAuthorityId(adminRegisterForm.getAuthorityId());
-		admin.setPositionId(adminRegisterForm.getPositionId());
-		admin.setPhoneNumber(adminRegisterForm.getPhoneNumber());
-		admin.setPassword(adminRegisterForm.getPassword());
-		
 		try { 
 			//管理者情報登録に成功すると
-				adminService.insert(admin);
+				adminService.insert(adminRegisterForm);
+				
 			//TOP画面に遷移
 				return "redirect:/top";
+				
 			//管理者情報重複により登録失敗すると
 		} catch (DuplicateKeyException e) {
+			
 			//エラーメッセージ表示して
 			model.addAttribute("errorMessage", e.getMessage());
+			
+			//権限・役職・店舗を表示
+			setAdminRegisterModel(model);			
 			
 			//登録画面に遷移
 			return "admin-register";

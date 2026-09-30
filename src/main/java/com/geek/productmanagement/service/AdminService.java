@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.dto.AdminListDto;
 import com.geek.productmanagement.entity.Admin;
+import com.geek.productmanagement.form.AdminRegisterForm;
 import com.geek.productmanagement.mapper.AdminMapper;
 
 @Service
@@ -32,7 +33,19 @@ public class AdminService {
 	
 	//管理者登録画面で入力したパスワードをハッシュ化した後に、Mapperに渡す
 	@Transactional
-	public int insert(Admin admin) {
+	public int insert(AdminRegisterForm adminRegisterForm) {
+		
+		//Adminオブジェクトを作成
+		Admin admin = new Admin();
+		
+		admin.setLastName(adminRegisterForm.getLastName());
+		admin.setFirstName(adminRegisterForm.getFirstName());
+		admin.setEmail(adminRegisterForm.getEmail());
+		admin.setStoreId(adminRegisterForm.getStoreId());
+		admin.setAuthorityId(adminRegisterForm.getAuthorityId());
+		admin.setPositionId(adminRegisterForm.getPositionId());
+		admin.setPhoneNumber(adminRegisterForm.getPhoneNumber());
+		admin.setPassword(adminRegisterForm.getPassword());
 		
 		//【同じメールアドレスの重複処理を防ぐ】
 		Admin existingAdmin = adminMapper.findByEmail(admin.getEmail());
@@ -44,7 +57,7 @@ public class AdminService {
 		}
 		
 		//取得したパスワードをハッシュ化
-		String encodedPassword = passwordEncoder.encode(admin.getPassword());
+		String encodedPassword = passwordEncoder.encode(adminRegisterForm.getPassword());
 		//Adminのパスワードをハッシュ化後の値に設定
 		admin.setPassword(encodedPassword);
 		
