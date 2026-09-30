@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.entity.Admin;
+import com.geek.productmanagement.form.AdminRegisterForm;
 import com.geek.productmanagement.service.AdminAuthorityService;
 import com.geek.productmanagement.service.AdminPositionService;
 import com.geek.productmanagement.service.AdminService;
@@ -20,6 +22,7 @@ import com.geek.productmanagement.service.StoreService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
@@ -30,6 +33,13 @@ public class AdminController {
 	private final StoreService storeService;
 	//AdminServiceクラスを使えるようにするため	
 	private final AdminService adminService;
+	
+	//modelに権限・役職・店舗を格納→管理者登録で使用するため
+	private void setAdminRegisterModel(Model model) {
+	    model.addAttribute("authorities", adminAuthorityService.findAll());
+	    model.addAttribute("positions", adminPositionService.findAll());
+	    model.addAttribute("stores", storeService.findAll());
+	}
 	public AdminController(AdminAuthorityService adminAuthorityService, 
 							AdminPositionService adminPositionService, 
 							StoreService storeService,
@@ -44,46 +54,45 @@ public class AdminController {
 	//管理者登録画面に遷移
 	@GetMapping("/register")
 	String showAdminRegister(Model model) {
-		//Serviceから取得したデータをModelに入れる
-		model.addAttribute("authorities", adminAuthorityService.findAll());
-		model.addAttribute("positions", adminPositionService.findAll());
-		model.addAttribute("stores", storeService.findAll());
+		
+		// 入力フォーム用の空オブジェクトを格納
+	    model.addAttribute("adminRegisterForm", new AdminRegisterForm());
+		
+		//権限・役職・店舗を表示
+		setAdminRegisterModel(model);
+		
 		return "admin-register";
 	}
 	
 	@PostMapping("/register")
-	String connectAdminService(@RequestParam Integer storeId,
-								@RequestParam String lastName,
-								@RequestParam String firstName,
-								@RequestParam String email,
-								@RequestParam Integer positionId,
-								@RequestParam Integer authorityId,
-								@RequestParam String phoneNumber,
-								@RequestParam String password,
+	String connectAdminService(@Valid AdminRegisterForm adminRegisterForm,
+								BindingResult bindingResult,
 								Model model) {
-		
-		//Adminオブジェクトを作成
-		Admin admin = new Admin();
-		
-		//setterで８項目をadminに格納
-		admin.setStoreId(storeId);
-		admin.setPositionId(positionId);
-		admin.setAuthorityId(authorityId);
-		admin.setLastName(lastName);
-		admin.setFirstName(firstName);
-		admin.setEmail(email);
-		admin.setPhoneNumber(phoneNumber);
-		admin.setPassword(password);
+
+	    // 入力エラーがある場合の処理		
+		if (bindingResult.hasErrors()) {
+			
+			//権限・役職・店舗を表示
+			setAdminRegisterModel(model);
+			
+			return "admin-register";
+		}
 		
 		try { 
 			//管理者情報登録に成功すると
-				adminService.insert(admin);
+				adminService.insert(adminRegisterForm);
+				
 			//TOP画面に遷移
 				return "redirect:/top";
+				
 			//管理者情報重複により登録失敗すると
 		} catch (DuplicateKeyException e) {
+			
 			//エラーメッセージ表示して
 			model.addAttribute("errorMessage", e.getMessage());
+			
+			//権限・役職・店舗を表示
+			setAdminRegisterModel(model);			
 			
 			//登録画面に遷移
 			return "admin-register";
