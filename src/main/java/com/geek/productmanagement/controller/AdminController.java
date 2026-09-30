@@ -1,5 +1,6 @@
 package com.geek.productmanagement.controller;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
@@ -20,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 	//画面のドロップダウン方式のための３つのServiceクラスを使えるようにするため
 	private final AdminAuthorityService adminAuthorityService;	
@@ -39,7 +42,7 @@ public class AdminController {
 	
 	
 	//管理者登録画面に遷移
-	@GetMapping("/admin-register")
+	@GetMapping("/register")
 	String showAdminRegister(Model model) {
 		//Serviceから取得したデータをModelに入れる
 		model.addAttribute("authorities", adminAuthorityService.findAll());
@@ -48,7 +51,7 @@ public class AdminController {
 		return "admin-register";
 	}
 	
-	@PostMapping("/admin-register")
+	@PostMapping("/register")
 	String connectAdminService(@RequestParam Integer storeId,
 								@RequestParam String lastName,
 								@RequestParam String firstName,
@@ -56,7 +59,8 @@ public class AdminController {
 								@RequestParam Integer positionId,
 								@RequestParam Integer authorityId,
 								@RequestParam String phoneNumber,
-								@RequestParam String password) {
+								@RequestParam String password,
+								Model model) {
 		
 		//Adminオブジェクトを作成
 		Admin admin = new Admin();
@@ -71,22 +75,24 @@ public class AdminController {
 		admin.setPhoneNumber(phoneNumber);
 		admin.setPassword(password);
 		
-		//管理者登録を実行して、登録「件数」をresultに入れる
-		int result = adminService.insert(admin);
-		
-		//登録成功時、TOP画面に遷移
-		if(result == 1) {
-			return "redirect:/top";		
-		}else
-		//登録失敗時、管理者登録画面のまま遷移しない
-			{
+		try { 
+			//管理者情報登録に成功すると
+				adminService.insert(admin);
+			//TOP画面に遷移
+				return "redirect:/top";
+			//管理者情報重複により登録失敗すると
+		} catch (DuplicateKeyException e) {
+			//エラーメッセージ表示して
+			model.addAttribute("errorMessage", e.getMessage());
+			
+			//登録画面に遷移
 			return "admin-register";
 		}
 
 	}
 
 	//管理者一覧画面に遷移
-	@GetMapping("/admin-list")
+	@GetMapping("/list")
 	String showAdminList(Model model) {
 		//Serviceから取得したデータをModelに格納。"admins"と名付け
 		model.addAttribute("admins", adminService.findAll());
@@ -94,14 +100,14 @@ public class AdminController {
 	}
 	
 	//管理者詳細画面に遷移
-	@GetMapping("/admin-detail")
+	@GetMapping("/detail")
 	String showAdminDetail(@RequestParam("id") Integer id,Model model) {
 		model.addAttribute("admin", adminService.findDetailById(id));
 		return "admin-detail";
 	}
 	
 	//管理者詳細画面の「削除機能」：削除＆ログアウト
-	@PostMapping("/admin-delete")
+	@PostMapping("/delete")
 	String deleteById(@RequestParam("id") Integer id,Authentication authentication,
 						HttpServletRequest request, HttpServletResponse response) {
 		//ログイン中管理者のメールアドレス取得&格納   by  CustomUserDetailsServiceにてメルアドをusernameとして設定してるため可能
@@ -124,11 +130,11 @@ public class AdminController {
 			return "redirect:/login";
 		}
 		//別の管理者削除の場合
-		return "redirect:/admin-list";
+		return "redirect:/admin/list";
 	}
 
 	//管理者編集画面の「初期画面」表示
-	@GetMapping("/admin-edit")
+	@GetMapping("/edit")
 	String showAdminEdit(@RequestParam("id") Integer id, Model model) {
 		//編集画面に表示する現在のデータ
 		model.addAttribute("admin", adminService.findById(id));
@@ -140,16 +146,16 @@ public class AdminController {
 	}
 	
 	// 管理者情報を更新
-	@PostMapping("/admin-edit")
+	@PostMapping("/edit")
 	String updateAdmin(@ModelAttribute Admin admin) {
 
 	    int result = adminService.updateById(admin);
 
 	    if (result == 1) {
-	        return "redirect:/admin-detail?id=" + admin.getId();
+	        return "redirect:/admin/detail?id=" + admin.getId();
 	    }
 
-	    return "redirect:/admin-edit?id=" + admin.getId();
+	    return "redirect:/admin/edit?id=" + admin.getId();
 	}
 	
 }

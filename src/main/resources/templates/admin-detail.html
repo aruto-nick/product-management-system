@@ -27,12 +27,12 @@
 				<td th:text="${admin.authorityName}"></td>
 				<td th:text="${admin.phoneNumber}"></td>
 				<td th:text="${#temporals.format(
-							admin.createdAt, 'yyyy年MM月dd日 HH:mm:ss')}"></td>
+							admin.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
 				<td th:text="${#temporals.format(
-							admin.updatedAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
+							admin.updatedAt, 'yyyy-MM-dd HH:mm')}"></td>
 			</tr>
 		</table>
-		<form th:action="@{/admin-delete}" method="post" 
+		<form th:action="@{/admin/delete}" method="post" 
 				onsubmit="return confirm('本当に管理者情報を削除しますか？')">
 			<input type="hidden" name="id" th:value="${admin.id}">
 				<button type="submit">
@@ -40,7 +40,7 @@
 				</button>
 		</form>
 		
-		<a th:href="@{/admin-edit(id=${admin.id})}">
+		<a th:href="@{/admin/edit(id=${admin.id})}">
 			編集
 		</a>
 	</body>
