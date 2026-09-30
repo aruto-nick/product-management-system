@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.geek.productmanagement.dto.AdminDetailDto;
 import com.geek.productmanagement.entity.Admin;
+import com.geek.productmanagement.form.AdminRegisterForm;
 import com.geek.productmanagement.service.AdminAuthorityService;
 import com.geek.productmanagement.service.AdminPositionService;
 import com.geek.productmanagement.service.AdminService;
@@ -20,6 +22,7 @@ import com.geek.productmanagement.service.StoreService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
@@ -52,28 +55,31 @@ public class AdminController {
 	}
 	
 	@PostMapping("/register")
-	String connectAdminService(@RequestParam Integer storeId,
-								@RequestParam String lastName,
-								@RequestParam String firstName,
-								@RequestParam String email,
-								@RequestParam Integer positionId,
-								@RequestParam Integer authorityId,
-								@RequestParam String phoneNumber,
-								@RequestParam String password,
+	String connectAdminService(@Valid AdminRegisterForm adminRegisterForm,
+								BindingResult bindingResult,
 								Model model) {
+
+	    // 入力エラーがある場合の処理		
+		if (bindingResult.hasErrors()) {
+			
+			model.addAttribute("authorities", adminAuthorityService.findAll());
+			model.addAttribute("positions", adminPositionService.findAll());
+			model.addAttribute("stores", storeService.findAll());
+			
+			return "admin-register";
+		}
 		
 		//Adminオブジェクトを作成
 		Admin admin = new Admin();
 		
-		//setterで８項目をadminに格納
-		admin.setStoreId(storeId);
-		admin.setPositionId(positionId);
-		admin.setAuthorityId(authorityId);
-		admin.setLastName(lastName);
-		admin.setFirstName(firstName);
-		admin.setEmail(email);
-		admin.setPhoneNumber(phoneNumber);
-		admin.setPassword(password);
+		admin.setLastName(adminRegisterForm.getLastName());
+		admin.setFirstName(adminRegisterForm.getFirstName());
+		admin.setEmail(adminRegisterForm.getEmail());
+		admin.setStoreId(adminRegisterForm.getStoreId());
+		admin.setAuthorityId(adminRegisterForm.getAuthorityId());
+		admin.setPositionId(adminRegisterForm.getPositionId());
+		admin.setPhoneNumber(adminRegisterForm.getPhoneNumber());
+		admin.setPassword(adminRegisterForm.getPassword());
 		
 		try { 
 			//管理者情報登録に成功すると
